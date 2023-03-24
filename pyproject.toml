@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "chainingiterator"
+version = "0.1.0"
+description = ""
+authors = ["Adam Ruman <ruman.adam@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.991"
+pytest = "^7.2.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
