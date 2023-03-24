@@ -1,4 +1,5 @@
 from typing import Iterator, Iterable, Collection, Any, Callable, Optional, Generator
+from math import inf
 
 
 class ChainingIterator(Iterator):
@@ -285,3 +286,14 @@ class ChainingIterator(Iterator):
         self.__consumed_guard()
         self.consumed = True
         return constructor(self._iter)
+
+    # TODO: partial eq type check
+
+    def max(self) -> Any:
+        return self.foldl(accumulator=-inf, func=lambda acc, val: max(acc, val))
+
+    def min(self) -> Any:
+        return self.foldl(accumulator=inf, func=lambda acc, val: min(acc, val))
+
+    def sum(self) -> Any:
+        return self.foldl(accumulator=0, func=lambda acc, val: acc + val)

@@ -383,3 +383,18 @@ def test_yield_from():
 
     assert base == [1, 2, 3, 4, 5, 6]
     assert base == res
+
+
+def test_sum():
+    base = [1, 2, 3, 4, 5, 6]
+    assert Chi(base).sum() == sum(base)
+
+
+def test_max():
+    base = [1, 2, 3, 4, 5, 6]
+    assert Chi(base).max() == max(base)
+
+
+def test_min():
+    base = [1, 2, 3, 4, 5, 6]
+    assert Chi(base).min() == min(base)
