@@ -12,7 +12,6 @@ class ChainingIterator(Iterator):
 
     def __iter__(self):
         self.__consumed_guard()
-        self.consumed = True
         return self
 
     def __next__(self):
@@ -221,13 +220,13 @@ class ChainingIterator(Iterator):
         if stop_condition is None:
             for elem in self._iter:
                 accumulator = func(accumulator, elem)
+            self.consumed = True
             return accumulator
         # else
         for elem in self._iter:
             accumulator = func(accumulator, elem)
             if accumulator == stop_condition:
                 break
-        self.consumed = True
         return accumulator
 
     def map_while(self, constraint: Callable, transformation: Callable) -> "ChainingIterator":

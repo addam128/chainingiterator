@@ -374,8 +374,12 @@ def test_yield_from():
 
     base = [1, 2, 3, 4, 5, 6]
     res = []
+    counter = 0
     for elem in inner_fn(Chi(base)):
         res.append(elem)
+        counter += 1
+
+    assert counter == 6
 
     assert base == [1, 2, 3, 4, 5, 6]
     assert base == res
