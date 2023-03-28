@@ -398,3 +398,21 @@ def test_max():
 def test_min():
     base = [1, 2, 3, 4, 5, 6]
     assert Chi(base).min() == min(base)
+
+
+def test_avg():
+    base = [1, 2, 3, 4, 5, 6]
+    assert Chi(base).avg() == sum(base) / len(base)
+
+
+def test_len():
+    base = [1, 2, 3, 4, 5, 6]
+    chi = Chi(base)
+
+    assert len(chi) == 6
+
+    chi.filter(lambda n: n % 2 == 0)
+    assert len(chi) == 3
+
+    chi = Chi(base).skip(2)
+    assert len(chi) == 4
