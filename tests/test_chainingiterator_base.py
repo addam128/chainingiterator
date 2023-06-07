@@ -1,7 +1,7 @@
 from chainingiterator import Chi
 import pytest
 import copy
-from typing import Generator, Any
+from typing import Generator, Any, Tuple
 
 
 def test_construct_next():
@@ -348,6 +348,16 @@ def test_flatten():
     assert Chi(base).flatten().collect(list) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
     assert base == [[1], [[2, 3]], [[4, [5, 6]]], [7, [8, [9, [10, [11]]]]]]
 
+    base = [(1)]
+    assert Chi(base).flatten(stop_condition=lambda elem: isinstance(elem, Tuple)).collect(list) == [(1)]
+    base = [[(1)]]
+    assert Chi(base).flatten(stop_condition=lambda elem: isinstance(elem, Tuple)).collect(list) == [(1)]
+    base = [[[(1)]]]
+    assert Chi(base).flatten(stop_condition=lambda elem: isinstance(elem, Tuple)).collect(list) == [(1)]
+    base = [[[[(1)]]]]
+    assert Chi(base).flatten(stop_condition=lambda elem: isinstance(elem, Tuple)).collect(list) == [(1)]
+    base = [[1], [[(2, 3)]], [[(4, [5, 6])]], [7, [8, [9, [10, [11]]]]]]
+    assert Chi(base).flatten(stop_condition=lambda elem: isinstance(elem, Tuple)).collect(list) == [1, (2, 3), (4, [5, 6]), 7, 8, 9, 10, 11]
 
 def test_consumation():
     base = [1, 2, 3, 4, 5, 6]
