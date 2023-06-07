@@ -281,9 +281,9 @@ class ChainingIterator(Iterator, Sized):
         self._iter = choosy_map(self._iter, constraint, transformation)
         return self
 
-    def flatten(self) -> "ChainingIterator":
+    def flatten(self, stop_condition: Callable) -> "ChainingIterator":
         def inner_flatter(target: Any) -> Iterator:
-            if not isinstance(target, Iterable):
+            if not isinstance(target, Iterable) or stop_condition(target):
                 yield target
                 return
             for sub in target:
