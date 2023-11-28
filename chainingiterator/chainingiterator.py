@@ -250,17 +250,21 @@ class ChainingIterator(Iterator, Sized):
         stop_condition: Optional[Any] = None,
     ) -> Any:
         self.__consumed_guard()
-        if stop_condition is None:
+        try:
+            if stop_condition is None:
+                for elem in self._iter:
+                    accumulator = func(accumulator, elem)
+                self._consumed = True
+                return accumulator
+            # else
             for elem in self._iter:
                 accumulator = func(accumulator, elem)
-            self._consumed = True
+                if accumulator == stop_condition:
+                    break
+        except RuntimeError as e:
+            print(e)
+        finally:
             return accumulator
-        # else
-        for elem in self._iter:
-            accumulator = func(accumulator, elem)
-            if accumulator == stop_condition:
-                break
-        return accumulator
 
     def map_while(self, constraint: Callable, transformation: Callable) -> "ChainingIterator":
         def choosy_map_fastfail(

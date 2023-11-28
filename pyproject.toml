@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "chainingiterator"
-version = "0.2.1"
+version = "0.2.2"
 description = "A python wrapper-library for iterators to be usable via chaining(such as C#, Java streams or Rust iterators). Extended functionality based on Rust's buit-in iterators."
 authors = ["Adam Ruman <ruman.adam@gmail.com>"]
 readme = "README.md"
