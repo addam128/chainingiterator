@@ -114,14 +114,14 @@ class ChainingIterator(Iterator, Sized):
             except StopIteration:
                 pass
             except RuntimeError as e:
-                print(e)
+                # print(e)
                 pass
             try:
                 yield from second
             except StopIteration:
                 return
             except RuntimeError as e:
-                print(e)
+                # print(e)
                 return
 
         self.__consumed_guard()
@@ -262,7 +262,7 @@ class ChainingIterator(Iterator, Sized):
                 if accumulator == stop_condition:
                     break
         except RuntimeError as e:
-            print(e)
+            pass
         finally:
             return accumulator
 
