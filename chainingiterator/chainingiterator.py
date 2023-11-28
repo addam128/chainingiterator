@@ -109,8 +109,14 @@ class ChainingIterator(Iterator, Sized):
 
     def chain(self, other: Iterator) -> "ChainingIterator":
         def _chain(first: Iterator, second: Iterator) -> Iterator:
-            yield from first
-            yield from second
+            try:
+                yield from first
+            except StopIteration:
+                pass
+            try:
+                yield from second
+            except StopIteration:
+                return
 
         self.__consumed_guard()
         self._iter = _chain(self._iter, other)
@@ -281,9 +287,11 @@ class ChainingIterator(Iterator, Sized):
         self._iter = choosy_map(self._iter, constraint, transformation)
         return self
 
-    def flatten(self, stop_condition: Optional[Callable]=None) -> "ChainingIterator":
+    def flatten(self, stop_condition: Optional[Callable] = None) -> "ChainingIterator":
         def inner_flatter(target: Any) -> Iterator:
-            if not isinstance(target, Iterable) or (stop_condition and stop_condition(target)):
+            if not isinstance(target, Iterable) or (
+                stop_condition is not None and stop_condition(target)
+            ):
                 yield target
                 return
             for sub in target:
