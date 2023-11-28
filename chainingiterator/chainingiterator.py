@@ -113,9 +113,15 @@ class ChainingIterator(Iterator, Sized):
                 yield from first
             except StopIteration:
                 pass
+            except RuntimeError as e:
+                print(e)
+                pass
             try:
                 yield from second
             except StopIteration:
+                return
+            except RuntimeError as e:
+                print(e)
                 return
 
         self.__consumed_guard()
