@@ -109,20 +109,8 @@ class ChainingIterator(Iterator, Sized):
 
     def chain(self, other: Iterator) -> "ChainingIterator":
         def _chain(first: Iterator, second: Iterator) -> Iterator:
-            try:
-                yield from first
-            except StopIteration:
-                pass
-            except RuntimeError as e:
-                # print(e)
-                pass
-            try:
-                yield from second
-            except StopIteration:
-                return
-            except RuntimeError as e:
-                # print(e)
-                return
+            yield from first
+            yield from second
 
         self.__consumed_guard()
         self._iter = _chain(self._iter, other)
@@ -250,21 +238,17 @@ class ChainingIterator(Iterator, Sized):
         stop_condition: Optional[Any] = None,
     ) -> Any:
         self.__consumed_guard()
-        try:
-            if stop_condition is None:
-                for elem in self._iter:
-                    accumulator = func(accumulator, elem)
-                self._consumed = True
-                return accumulator
-            # else
+        if stop_condition is None:
             for elem in self._iter:
                 accumulator = func(accumulator, elem)
-                if accumulator == stop_condition:
-                    break
-        except RuntimeError as e:
-            pass
-        finally:
+            self._consumed = True
             return accumulator
+        # else
+        for elem in self._iter:
+            accumulator = func(accumulator, elem)
+            if accumulator == stop_condition:
+                break
+        return accumulator
 
     def map_while(self, constraint: Callable, transformation: Callable) -> "ChainingIterator":
         def choosy_map_fastfail(
